@@ -1,0 +1,63 @@
+// subset sum problem by recursive solution
+public class SubsetSumRecursive {
+
+    public static boolean subsetSum(int[] nums, int target, int n) {
+        // Base case
+        if (target == 0) {
+            return true;
+        }
+        
+        // Base case
+        if (n == 0) {
+            return false;
+        }
+         if (nums[n - 1] > target) {
+            return subsetSum(nums, target, n - 1);
+        }
+         return subsetSum(nums, target - nums[n - 1], n - 1) || subsetSum(nums, target, n - 1);
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 34, 4, 12, 5, 2};
+        int target = 9;
+        int n = nums.length;
+        
+        boolean existsSubset = subsetSum(nums, target, n);
+        System.out.println("Subset with sum " + target + " exists: " + existsSubset);
+    }
+}
+
+// subset sum problem by tabulation solution
+public class SubsetSumTabulation {
+
+    public static boolean subsetSum(int[] nums, int target) {
+        int n = nums.length;
+        boolean[][] dp = new boolean[n + 1][target + 1];
+        
+        // Base case
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+        
+        //  using bottom-up approach
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= target; j++) {
+                if (nums[i - 1] > j) {
+                    dp[i][j] = dp[i - 1][j];
+                } else {
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
+                }
+            }
+        }
+        
+        return dp[n][target];
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 34, 4, 12, 5, 2};
+        int target = 9;
+        
+        boolean existsSubset = subsetSum(nums, target);
+        System.out.println("Subset with sum " + target + " exists: " + existsSubset);
+    }
+}
